@@ -12,7 +12,8 @@ use common\models\Product;
 
 $this->title = 'Product';/*
 $listings = ProductImages::find()->joinWith('product')->all();*/
-$products = Product::find()->where(['status'=>1])->andwhere(['canStatus'=>1])->joinWith('cans')->all();
+$products = Product::find()->where(['status'=>1])->all();
+$can = Cans::find()->where(['canStatus'=>1])->all();
 ?>
   <style>
 .checked {
@@ -30,7 +31,7 @@ $products = Product::find()->where(['status'=>1])->andwhere(['canStatus'=>1])->j
                             <div class="slider-content pt-30 text-center">
                                 <h2 data-animation="fadeInUp" data-delay="1s">Always want safe and good water for healthy life</h2>
                                 <p data-animation="fadeInUp" data-delay="1.5s">Nunc molestie mi nunc, nec accumsan libero dignissim sit amet. Fusce sit <br> amet tincidunt metus. Nunc eu risus suscipit massa dapibu.</p>
-                                <a data-animation="fadeInUp" data-delay="2s" href="#">Buy Now</a>
+                                <a data-animation="fadeInUp" data-delay="2s" href="#">Order Now</a>
                             </div> <!-- slider content -->
                         </div>
                     </div> <!-- row -->
@@ -55,90 +56,112 @@ $products = Product::find()->where(['status'=>1])->andwhere(['canStatus'=>1])->j
     <!--====== SLIDER PART ENDS ======-->
 
     <!--====== PRODUCTS PART START ======-->
-    
     <section id="products-part" class="pt-70 pb-80">
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div class="section-title text-center pb-15">
-                    <h2>Our Products</h2>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <p>Nunc molestie mi nunc, nec accumsan libero dignissim sit amet. Fusce sit amet tincidunt metus. Nunc eu risus  suscipit massa dapibus blandit. Vivamus ac commodo eros.</p>
-                </div> <!-- section-title -->
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="section-title text-center pb-15">
+                        <h2>Our Products</h2>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <p>Nunc molestie mi nunc, nec accumsan libero dignissim sit amet. Fusce sit amet tincidunt metus. Nunc eu risus  suscipit massa dapibus blandit. Vivamus ac commodo eros.</p>
+                    </div> <!-- section-title -->
+                </div>
             </div>
-        </div>
             
-        <div class="row ml-4 ">
-        <?php foreach ($products as $product) {?>
-            <div class="col-md-4" >
-                <div class="card mt-4 mb-4" > 
-                    <div class="row " >
-                        <aside class="col-sm-5 border-right">
-                            <article class="gallery-wrap"> 
-                            <div class="img-big-wrap">
-                              <div> <a href="#"><img src="<?php echo $product->getImageUrl() ?>" ></a></div>
-                            </div> <!-- slider-product.// -->
-                            </article> <!-- gallery-wrap .end// -->
-                        </aside>
-                        <aside class="col-sm-7">
-                            <article class="card-body p-1">
-                                <h3 class="title mb-3"><?=$product->name  ?></h3>
-
-                            <p class="price-detail-wrap"> 
-                                <span class="price h3 text-warning"> 
-                                    <span class="currency">KES </span><span class="num"><?=$product->price  ?></span>
-                                </span> 
-                            </p> <!-- price-detail-wrap .// -->
-
-                            <dl class="item-property">
-                              <dt>Description</dt>
-                              <dd><p><?=$product->description  ?></p></dd>
-                            </dl>
-                            <dl class="param param-feature">
-                              <dt>Can#</dt>
-                              <dd>Each can at </dd>
-                            </dl>  <!-- item-property-hor .// -->
-
-                            <hr>
-                                <div class="row">
-                                    <div class="col-sm-5">
-                                        <dl class="param param-inline">
-                                          <dt>Quantity: </dt>
-                                          <dd>
-                                            <div class="form-group">
-                                                <input type="number" id="quantity_<?= $product->id?>" name="name" placeholder="Number" class="form-control" style="width:100px;" autocomplete="off">
-                                            </div>
-                                          </dd>
-                                        </dl>  <!-- item-property .// -->
-                                    </div> <!-- col.// -->
-                                    <div class="col-sm-7">
-                                        <dl class="param param-inline">
-                                            <dt>With Can: </dt>
-                                            <dd>
-                                             <label class="form-check form-check-inline">
-                                                  <input class="form-check-input" type="checkbox"  name="check[0]" id="can_<?= $product->id?>" value="1">
-                                                  <span class="form-check-label">WC</span>
-                                                </label>
-                                            </dd>
-                                        </dl>  <!-- item-property .// -->
-                                    </div> <!-- col.// -->
-                                </div> <!-- row.// -->
-                                <hr>
-                                <div class="form-group">
-                                <a href="#" baseUrl="<?= Yii::$app->request->baseUrl?>" id="<?= $product->id?>" class="btn btn-lg btn-outline-primary text-uppercase order"> <i class="fas fa-shopping-cart"></i> Order Now</a>
-                            </article> <!-- card-body.// -->
-                        </aside> <!-- col.// -->
+            <div class="row">   
+                <div class="stepwizard">
+                    <div class="stepwizard-row setup-panel">
+                        <div class="stepwizard-step col-xs-4"> 
+                            <a href="#step-1" type="button" class="btn btn-success btn-circle">1</a>
+                            <p><small>Water</small></p>
+                        </div>
+                        <div class="stepwizard-step col-xs-4"> 
+                            <a href="#step-2" type="button" class="btn btn-default btn-circle" disabled="disabled">2</a>
+                            <p><small>Cans</small></p>
+                        </div>
                     </div>
-                </div> <!-- row.// -->
+                </div>
+
+                <div class="panel panel-primary setup-content" id="step-1">
+                    <div class="panel-heading">
+                         <h3 class="panel-title">Water</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <?php foreach ($products as $product) {?>
+                                <div class="col-lg-3 col-md-4 col-sm-6">
+                                    <div class="singel-products mt-30">
+                                        <div class="products-image">
+                                            <img src="<?php echo $product->getImageUrl() ?>" alt="Products">
+                                            <div class="new-sele">
+                                                <a href="#">New</a>
+                                            </div>
+                                        </div>
+                                        <div class="products-contant">
+                                            <h6 class="products-title"><a href="#"><?=$product->name  ?></a></h6>
+                                            <div class="price-rating d-flex justify-content">
+                                                <div class="price">
+                                                    <span class="regular-price mr-3">KSh <?=$product->price  ?></span>
+                                                </div>                                                    
+                                            </div>
+                                            
+                                            <p class="text"><?php echo \yii\helpers\StringHelper::truncateWords($product->description, 15) ?></p>
+                                            <div class="products-cart">
+                                                <span><a class="cart-add order" baseUrl="<?= Yii::$app->request->baseUrl?>" id="<?= $product->id?>"><i class="fa fa-shopping-cart"></i>Add to cart</a>  </span>                           
+                                                        
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php }?>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="panel panel-primary setup-content" id="step-2">
+                    <div class="panel-heading">
+                         <h3 class="panel-title">Cans</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <?php foreach ($can as $cann) {?>
+                                <div class="col-lg-3 col-md-4 col-sm-6" style="width: 500px;">
+                                    <div class="singel-products mt-30">
+                                        <div class="products-image">
+                                            <img src="<?php echo $product->getImageUrl() ?>" alt="Products">
+                                            <div class="new-sele">
+                                                <a href="#">New</a>
+                                            </div>
+                                        </div>
+                                        <div class="products-contant">
+                                            <h6 class="products-title"><a href="#"><?=$cann->type  ?></a></h6>
+                                            <div class="price-rating d-flex justify-content">
+                                                <div class="price">
+                                                    <span class="regular-price mr-3">KSh <?=$cann->amount  ?></span>
+                                                </div>
+                                            </div>
+                                            <div class="products-cart">
+                                                    <span><a class="cart-add order" baseUrl="<?= Yii::$app->request->baseUrl?>" canId="<?= $cann->canId?>"><i class="fa fa-shopping-cart"></i>Add to cart</a>  </span>                           
+                                                        
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php }?>
+                        </div>
+                    
+                    </div>
+                </div>
             </div>
-        <br>
-        <?php }?>
-        </div> <!-- card.// -->
+            
+        </div>
     </section>
-    
+
+   
     <!--====== PRODUCTS PART ENDS ======-->
    
     <!--====== TRUSTED CLIENT PART START ======-->
@@ -260,7 +283,7 @@ $products = Product::find()->where(['status'=>1])->andwhere(['canStatus'=>1])->j
                     <div class="delivery-text text-center pb-30">
                         <h2>Water Delivery 20 k.m.  Free Service</h2>
                         <p>Nunc molestie mi nunc, nec accumsan libero dignissim sit amet. Fusce sit amet tincidunt metus. Nunc eu risus suscipit massa dapibu.</p>
-                        <a href="#">Read More</a>
+                        <a href="#">Order Now</a>
                     </div>
                 </div>
             </div>
@@ -349,4 +372,3 @@ $products = Product::find()->where(['status'=>1])->andwhere(['canStatus'=>1])->j
     
     <!--====== BACK TO TOP PART ENDS ======-->
    
-

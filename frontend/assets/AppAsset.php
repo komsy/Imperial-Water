@@ -26,7 +26,6 @@ class AppAsset extends AssetBundle
     public $js = [
         'js/app.js',
         'js/myscripts.js',
-        'js/jquery-1.12.4.min.js',
         'js/bootstrap.min.js',
         'js/slick.min.js',
         'js/popper.min.js',

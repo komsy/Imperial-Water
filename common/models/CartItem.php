@@ -7,17 +7,18 @@ use Yii;
 /**
  * This is the model class for table "{{%cart_items}}".
  *
- * @property int      $id
- * @property int      $product_id
- * @property int      $quantity
+ * @property int $id
+ * @property int $product_id
+ * @property int $quantity
+ * @property int|null $withCan
  * @property int|null $created_by
  *
- * @property User     $createdBy
- * @property Product  $product
+ * @property User $createdBy
+ * @property Products $product
  */
 class CartItem extends \yii\db\ActiveRecord
 {
-    //cart_items session key
+   //cart_items session key
     const SESSION_KEY = 'CART_ITEMS';
 
     /**
@@ -125,7 +126,7 @@ class CartItem extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['product_id', 'quantity', 'withCan'], 'required'],
+            [['product_id', 'quantity'], 'required'],
             [['product_id', 'quantity', 'withCan', 'created_by'], 'integer'],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
             [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Product::className(), 'targetAttribute' => ['product_id' => 'id']],
@@ -149,7 +150,7 @@ class CartItem extends \yii\db\ActiveRecord
     /**
      * Gets query for [[CreatedBy]].
      *
-     * @return \yii\db\ActiveQuery|\common\models\query\UserQuery
+     * @return \yii\db\ActiveQuery
      */
     public function getCreatedBy()
     {
@@ -159,13 +160,12 @@ class CartItem extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Product]].
      *
-     * @return \yii\db\ActiveQuery|\common\models\query\ProductQuery
+     * @return \yii\db\ActiveQuery
      */
     public function getProduct()
     {
-        return $this->hasOne(Product::className(), ['id' => 'product_id']);
+        return $this->hasOne(Products::className(), ['id' => 'product_id']);
     }
-
     /**
      * {@inheritdoc}
      * @return \common\models\query\CartItemQuery the active query used by this AR class.

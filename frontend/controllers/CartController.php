@@ -63,10 +63,10 @@ class CartController extends \frontend\base\Controller
         ]);
     }
 
-    /*public function actionAdd()
+    public function actionAdd()
     {
         $id = \Yii::$app->request->post('id');
-       
+       var_dump($id); exit();
         $product = Product::find()->id($id)->published()->one(); 
         if (!$product) {
             throw new NotFoundHttpException("Product does not exist");
@@ -119,7 +119,7 @@ class CartController extends \frontend\base\Controller
                 ];
             }
         }
-    }*/
+    }
     public function actionHistory()
     {
         return $this->render('history');
@@ -327,7 +327,7 @@ class CartController extends \frontend\base\Controller
                      <h6>'.$response['Response']['errorMessage'].'</h6><h6>For more information Please Contact Support Via: 0704081087</h6>
                     </div>';
             \Yii::$app->session->setFlash('error', $Msg);
-            $this->redirect(['product/index']);
+            $this->redirect(\Yii::$app->homeUrl);
         }else{
             $model->load($postData);
             if (array_key_exists('MerchantRequestID', $response['Response'])) {
@@ -339,7 +339,7 @@ class CartController extends \frontend\base\Controller
                             <h5> '.$response['Response']['CustomerMessage'].'</h5><h5>Payment successfully made</h5>
                           </div>';
             \Yii::$app->session->setFlash('success', $Msg);
-            $this->redirect(['site/index']);
+            $this->redirect(\Yii::$app->homeUrl);
         }
     }
     public function saveRequestData($response,$orderId){
@@ -355,6 +355,7 @@ class CartController extends \frontend\base\Controller
         $model->orderId = $orderId;
         $model->userId = \yii::$app->user->Id;
         
+        /*var_dump($model); exit();*/
         $model->save();
         
         return $model;  

@@ -79,13 +79,18 @@ class SiteController extends \frontend\base\Controller
      */
     public function actionIndex()
     {   
+        $dataProvider = new ActiveDataProvider([
+            'query' => Product::find()->published(),
+        ]);
         $checkbook = Cashier::find()->where(['userId'=>Yii::$app->user->id])->one();
             if(!empty($checkbook)){ //checks if logged patient has created profile 
                 $this ->layout='auth';
                 return $this->redirect(['cashier/index']);
            } 
            else{
-            return $this->render('index');
+            return $this->render('index', [
+            'dataProvider' => $dataProvider
+        ]);
         }
     }
     /**
@@ -235,29 +240,28 @@ class SiteController extends \frontend\base\Controller
             'model' => $model
         ]);
     }
-    public function actionAddorder($id,$withCan,$quantity)
+
+    public function actionAddorder($id)
     {
-        $model = New Cartitem();
-        $product = Product::find()->id($id)->published()->one(); 
-        $userId = \yii::$app->user->id;
-        $cartItem = CartItem::find()->userId($userId)->productId($id)->one();
+        /*var_dump($id); exit(); */
+        $quantity = 1;
+        $product = Product::find()->id($id)->published()->one();
         if (!$product) {
             throw new NotFoundHttpException("Product does not exist");
         }
-        if($withCan == "1" ){
-            $withCan = $quantity+$model->withCan;
-            if ($cartItem){
-                    $cartItem->quantity=$cartItem->quantity+$quantity;
-                    $cartItem->withCan=$cartItem->withCan+$withCan;
-                }else{
-                    $cartItem = new CartItem();
-                    $cartItem->product_id = $id;
-                    $cartItem->created_by = $userId;
-                    $cartItem->quantity = $quantity;
-                    $cartItem->withCan = $withCan;
-                }
+                $userId = \yii::$app->user->id;
+                $cartItem = CartItem::find()->where(['created_by'=>yii::$app->user->id])->andWhere(['product_id'=>$id])->asArray()->one();
                 /*var_dump($cartItem); exit();*/
-                    if ($cartItem->save()) {
+                if(empty($CartItem)){
+
+                    $model = new CartItem();
+                    $model->product_id = $id;
+                    $model->created_by = $userId;
+                    $model->quantity = $quantity;
+                    /*var_dump($data); exit();
+                    if($model->load($data)){ 
+                        var_dump($model); exit();*/
+                    if ($model->save()) {
                     return [
                         'success' => true
                     ];
@@ -268,19 +272,39 @@ class SiteController extends \frontend\base\Controller
                         ];
                     }
                 
-            }
-            else{
-                if ($cartItem){
-                    $cartItem->quantity=$cartItem->quantity+$quantity;
-                }else{
-                    $cartItem = new CartItem();
-                    $cartItem->product_id = $id;
-                    $cartItem->created_by = $userId;
-                    $cartItem->quantity = $quantity;
-                    $cartItem->withCan = $withCan;
-                }
+            }else{
+                    $data = ['Cartitem'=>['product_id'=>$id,'created_by'=>yii::$app->user->id,'quantity'=>1]];
+
+                if($cartItem->load($data)){  
+                            var_dump($cartItem); exit();          
+                            $cartItem->save();                   
+                            return $this->redirect(['site/index']);
+                         }
+                    return false;
+                } 
+            
+    }
+    public function actionAddCan($id)
+    {
+        /*var_dump($id); exit(); */
+        $quantity = 1;
+        $product = Product::find()->id($id)->published()->one();
+        if (!$product) {
+            throw new NotFoundHttpException("Product does not exist");
+        }
+                $userId = \yii::$app->user->id;
+                $cartItem = CartItem::find()->where(['created_by'=>yii::$app->user->id])->andWhere(['product_id'=>$id])->asArray()->one();
                 /*var_dump($cartItem); exit();*/
-                    if ($cartItem->save()) {
+                if(empty($CartItem)){
+
+                    $model = new CartItem();
+                    $model->product_id = $id;
+                    $model->created_by = $userId;
+                    $model->quantity = $quantity;
+                    /*var_dump($data); exit();
+                    if($model->load($data)){ 
+                        var_dump($model); exit();*/
+                    if ($model->save()) {
                     return [
                         'success' => true
                     ];
@@ -290,7 +314,17 @@ class SiteController extends \frontend\base\Controller
                             'errors' => $cartItem->errors
                         ];
                     }
-            }   
+                
+            }else{
+                    $data = ['Cartitem'=>['product_id'=>$id,'created_by'=>yii::$app->user->id,'quantity'=>1]];
 
+                if($cartItem->load($data)){  
+                            var_dump($cartItem); exit();          
+                            $cartItem->save();                   
+                            return $this->redirect(['site/index']);
+                         }
+                    return false;
+                } 
+            
     }
 }

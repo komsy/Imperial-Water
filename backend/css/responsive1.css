@@ -1,0 +1,34 @@
+/* lg */ 
+@media (min-width: 1200px) {
+
+}
+
+/* md */
+@media (min-width: 992px) and (max-width: 1199px) {
+ 
+.shipping img{
+	width: 100%;
+}
+}
+/* sm */
+@media (min-width: 768px) and (max-width: 991px) {
+
+ .category-tab ul li a{
+	font-size: 12px;
+}
+
+.shipping{
+	margin-bottom: 20px;
+}
+
+.shipping{
+	margin-bottom: 25px;
+}
+
+.category-tab .nav-tabs li{
+	float: none;
+}
+.tab-pane .col-sm-3, .features_items .col-sm-4{
+	width: 50%;
+}
+}

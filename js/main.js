@@ -292,21 +292,4 @@ $(function() {
         focusOnSelect: true
     });
     
-    
-    //===== Quantite
-    
-    $('input[type="number"]').niceNumber();
-
-    
-    //===== Nice Select
-    
-    $("select").niceSelect();
-    
-    
-    //===== Validator
-    
-    $("#contact-form").validator();
-    
-
-    
 });

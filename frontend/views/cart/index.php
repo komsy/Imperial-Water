@@ -6,12 +6,16 @@
  */
 
 /** @var array $items */
+use yii\helpers\Url;
 ?>
 
 
 <div class="container card">
-    <div class="card-header">
-        <h3>Your cart items</h3>
+    <div class="card-header bg-dark text-light">
+        <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+        Your cart items
+        <a href="<?= Url::to(['product/index'])?>" class="btn btn-outline-info btn-sm float-right">Continue shopping</a>
+        <div class="clearfix"></div>
     </div>
     <div class="card-body p-0">
 
